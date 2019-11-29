@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "outDir": "./__build__",
+    "rootDir": ".",
+    "noStrictGenericChecks": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "jsxFactory": "E",
+    "resolveJsonModule": true,
+    "lib": ["es6", "dom"],
+    "types": ["node"]
+  },
+  "exclude": ["__dist__", "__build__"]
+}

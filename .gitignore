@@ -1,0 +1,4 @@
+*.lock
+__build__
+__dist__
+node_modules
