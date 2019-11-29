@@ -44,7 +44,7 @@ export function touchItem(item_id: number, modified: boolean = false) {
       set
         atime = ${now},
         ${modified ? 'mtime = ${now}' : ''}
-        access_nb = access_nb + 1
+        access_count = access_count + 1
     where id = ${item_id}
   `
   // check the row count to make sure something was actually updated.

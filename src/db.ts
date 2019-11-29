@@ -1,27 +1,22 @@
-import S from 'better-sqlite3'
+import * as Sqlite from 'better-sqlite3'
 
-const sql_user = /* sql */ `
-  create table user (
+export const DATA_DIR = process.env.DATA_DIR ?? '/protected/data'
+export const DB_PATH = DATA_DIR + '/db.sqlite'
+
+export const db: Sqlite.Database = new Sqlite(DB_PATH)
+
+db.pragma(`journal_mode = 'wal'`)
+
+db.exec(/* sql */ `
+  create table if not exists user (
     username text not null primary key, -- always an email
     name text not null default '',
     is_admin int default 0 -- one or zero
   )
-`
+`)
 
-export const enum ObjectType {
-  Folder = 0,
-  File
-}
-
-
-export interface Item {
-
-}
-
-
-//
-const sql_item = /* sql */ `
-  create table item (
+db.exec(/* sql */ `
+  create table if not exists item (
     id text not null primary key, -- uuid of the object
     parent_id text references item(id), -- null for root folders
     type int, -- 0 if folder, 1 if file
@@ -31,21 +26,40 @@ const sql_item = /* sql */ `
     ctime int not null, -- as milliseconds since epoch in gmt
     atime int not null,
     mtime int not null,
-    access_nb int not null default 0
+    access_count int not null default 0
   )
-`
+`)
 
 // Links between
-const sql_user_link = /* sql */ `
-  create table user_object (
+db.exec(/* sql */ `
+  create table if not exists user_item (
     username text not null references user(username),
     object text not null references object(id) -- only buckets !
   )
-`
+`)
+
+export const enum ObjectType {
+  Folder = 0,
+  File
+}
+
+export interface Item {
+  id: string
+  parent_id: string | null
+  type: ObjectType
+  size: number
+
+  name: string
+  description: string
+  ctime: number
+  atime: number
+  mtime: number
+  access_count: number
+}
+
 
 export interface User {
   username: string
   name: string
   is_admin: number
 }
-
